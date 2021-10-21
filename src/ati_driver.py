@@ -22,10 +22,16 @@ class ATIDriver(object):
 
         # publisher
         self.ft_pub = rospy.Publisher("ati_ft",WrenchStamped,queue_size=1)
-    
-    def get_ft(self):
 
-        res, ft, status = self.ati_obj.try_read_ft_streaming(.1)
+        self.ati_obj.start_streaming()
+
+        # loop timer
+        self.rate = 1e-3
+        pub_timer = rospy.Timer(rospy.Duration(self.rate),self.get_ft)
+    
+    def get_ft(self, event):
+
+        res, ft, status = self.ati_obj.try_read_ft_streaming(0)
         fstamp = rospy.Time.now()
 
         w = WrenchStamped()
@@ -66,8 +72,7 @@ def main():
     rospy.init_node('ati_driver')
     ati_driver_obj = ATIDriver(args.sensor_ip)
 
-    while not rospy.is_shutdown():
-        ati_driver_obj.get_ft()
+    rospy.spin()
 
 if __name__ == "__main__":
     main()

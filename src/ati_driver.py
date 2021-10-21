@@ -18,7 +18,7 @@ class ATIDriver(object):
 
         # service server
         self.tare_srv = rospy.Service('set_ati_tare',Trigger,self.set_tare)
-        self.clr_tare_srv = rospy.Service('clear_ati_tare',Trigger,self.set_tare)
+        self.clr_tare_srv = rospy.Service('clear_ati_tare',Trigger,self.clear_tare)
 
         # publisher
         self.ft_pub = rospy.Publisher("ati_ft",WrenchStamped,queue_size=1)
